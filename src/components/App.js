@@ -15,20 +15,31 @@ class App extends Component {
   }
 
   renderHog = () => {
-  if (this.state.filterClicked === true){
-    let hogArr = hogs.filter((hog) => {
-      return hog.greased === true
-    })
-    return hogArr.map((hog) =>{
-      return ( <Hog
-      hog = {hog}
-      key = {hog.name}
-      />)
-    })
+    if (this.state.filterClicked === true) {
+    
+      if (this.state.sortByName === true) {
+        const sortedArr = this.state.hogList.sort(this.compareName);
+
+        return sortedArr.map((hog) => {
+          return (<Hog
+            hog={hog}
+            key={hog.name}
+          />)
+        })
+      }
+
+      else {
+        return this.state.hogList.map((hog) => {
+          return (<Hog
+            hog={hog}
+            key={hog.name}
+          />)
+        })
+      }
   }
     
   else if (this.state.sortByName === true) {
-    const sortedArr = hogs.sort(this.compareName);
+    const sortedArr = this.state.hogList.sort(this.compareName);
 
     return sortedArr.map((hog) =>{
       return ( <Hog
@@ -39,7 +50,7 @@ class App extends Component {
   }
     
   else if (this.state.sortByWeight === true) {
-    const sortedArr = hogs.sort(this.compareWeight);
+    const sortedArr = this.state.hogList.sort(this.compareWeight);
 
     return sortedArr.map((hog) =>{
       return ( <Hog
@@ -60,6 +71,15 @@ class App extends Component {
   }
 
   handleClick = (evt) => {
+    if (evt.target.name === "filterClicked") {
+      let hogArr = hogs.filter((hog) => {
+        return hog.greased === true
+      })
+  
+      this.setState({
+        hogList: hogArr
+      })
+    }
     this.setState({ [evt.target.name]: true })
   }
 
