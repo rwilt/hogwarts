@@ -9,7 +9,9 @@ class App extends Component {
 
   state = {
     hogList: hogs,
-    filterClicked: false
+    filterClicked: false,
+    sortByName: false,
+    sortByWeight: false
   }
 
   renderHog = () => {
@@ -20,28 +22,75 @@ class App extends Component {
     return hogArr.map((hog) =>{
       return ( <Hog
       hog = {hog}
-      key = {hog.id}
+      key = {hog.name}
+      />)
+    })
+  }
+    
+  else if (this.state.sortByName === true) {
+    const sortedArr = hogs.sort(this.compareName);
+
+    return sortedArr.map((hog) =>{
+      return ( <Hog
+      hog = {hog}
+      key = {hog.name}
+      />)
+    })
+  }
+    
+  else if (this.state.sortByWeight === true) {
+    const sortedArr = hogs.sort(this.compareWeight);
+
+    return sortedArr.map((hog) =>{
+      return ( <Hog
+      hog = {hog}
+      key = {hog.name}
       />)
     })
   }
 
   else {
-  return hogs.map((hog)=>{
+    return hogs.map((hog) => {
     return (  <Hog
       hog = {hog}
-      key = {hog.id}
+      key={hog.name}
       /> )
     })
   }
   }
 
   handleClick = (evt) => {
-    this.setState({filterClicked:true})
+    this.setState({ [evt.target.name]: true })
   }
+
+  compareName(a, b) {
+    const hogA = a.name.toUpperCase();
+    const hogB = b.name.toUpperCase();
   
+    let comparison = 0;
+    if (hogA > hogB) {
+      comparison = 1;
+    } else if (hogA < hogB) {
+      comparison = -1;
+    }
+    return comparison;
+  }
+
+  compareWeight(a, b) {
+    const hogA = a.weight
+    const hogB = b.weight
+  
+    let comparison = 0;
+    if (hogA > hogB) {
+      comparison = 1;
+    } else if (hogA < hogB) {
+      comparison = -1;
+    }
+    return comparison;
+  }  
 
   render() {
-    
+
     return (
       <div className = {"ui grid container" && "App"} >
         <Nav 
